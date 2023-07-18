@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function Tabela({vetor, itensPorPagina}){
     const [paginaAtual, setPaginaAtual] = useState(1);
     const totalPaginas = Math.ceil(vetor.length / itensPorPagina);
-  
+    const baseUrl = "http://localhost:8080/transferencias"
+    const [saldoTotal, setSaldoTotal] = useState()
+    const [saldoPeriodo, setSaldoPeriodo] = useState()
+
+    useEffect(() => {
+        fetch(baseUrl)
+        .then(retorno => retorno.json())
+        .then(retorno_convertido => {
+            const soma = retorno_convertido.reduce((acumulador, objeto) => acumulador + objeto.valor, 0);
+            setSaldoTotal(soma.toFixed(2));
+        })
+    }, [])
+
+    useEffect(() => {
+        const soma = vetor.reduce((acumulador, objeto) => acumulador + objeto.valor, 0);
+        setSaldoPeriodo(soma.toFixed(2));
+    }, [vetor])
+
     const indiceUltimoItem = paginaAtual * itensPorPagina;
     const indicePrimeiroItem = indiceUltimoItem - itensPorPagina;
     const itensPaginaAtual = [];
@@ -18,6 +35,10 @@ function Tabela({vetor, itensPorPagina}){
 
     return(
         <>
+            <div className='saldo'>
+                <p>Saldo Total: R$ {saldoTotal}</p>
+                <p>Saldo no periodo: R$ {saldoPeriodo}</p>
+            </div>
             <table className='table'>
                 <thead>
                     <tr>

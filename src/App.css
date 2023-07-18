@@ -11,9 +11,17 @@ form{
 .box{
   display: flex;
   width: 100%;
-
 }
 
 form input{
   margin: 10px 20px 10px 20px;
+}
+
+.saldo{
+  display: flex;
+  border-bottom: 1px solid #a1a0a0;
+}
+
+.saldo p{
+  margin-right: 30px;
 }
